@@ -4,7 +4,7 @@ session_start();
 // Conectar ao banco de dados
 $host = 'localhost';
 $db_user = 'LS';  // Insira o usuário do seu banco de dados
-$db_password = '121212';  // Insira a senha do seu banco de dados
+$db_password = '';  // Insira a senha do seu banco de dados
 $db_name = 'sistema_login';
 
 $conn = new mysqli($host, $db_user, $db_password, $db_name);
