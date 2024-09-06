@@ -3,7 +3,7 @@ session_start();
 
 // Conectar ao banco de dados
 $host = 'localhost';
-$db_user = 'LS';  // Insira o usuário do seu banco de dados
+$db_user = 'root';  // Insira o usuário do seu banco de dados
 $db_password = '';  // Insira a senha do seu banco de dados
 $db_name = 'sistema_login';
 
