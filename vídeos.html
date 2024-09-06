@@ -88,6 +88,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
+            position: relative;
         }
 
         .video-item:hover {
@@ -103,9 +104,33 @@
             color: #7f8c8d;
         }
 
+        .video-item .download-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .video-item .download-btn:hover {
+            background-color: #2980b9;
+        }
+
         a {
             text-decoration: none;
             color: inherit;
+        }
+
+        /* Estilo do player de vídeo */
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -115,10 +140,10 @@
         <aside class="sidebar">
             <h2>Cursos</h2>
             <ul>
-                <li><a href="vídeos.html">PORTUGUÊS</a></li>
+                <li><a href="#">PORTUGUÊS</a></li>
                 <li><a href="#">MATEMÁTICA</a></li>
-               <button onclick="logout()">Sair</button>
                 <li><a href="#">Curso 4</a></li>
+                <button onclick="logout()">Sair</button>
             </ul>
         </aside>
 
@@ -130,40 +155,72 @@
             
             <section class="course-content">
                 <h2>Aulas</h2>
-                <div class="video-list">
-                    <div class="video-item">
-                        <a href="">
-                            <h3>Aula 1: ORAÇÃO, FRASE E PERIODO</h3>
-                            <p>Duração: 20min</p>
-                      
-        </div>
-        <div class="video-item">
-            <a href="#">
-                <h3>Aula 3: Avançando nos Estudos</h3>
-                <p>Duração: 45min</p>
-            </a>
-                    </div>
+                <div id="video-player-container">
+                    <!-- Player de vídeo -->
+                    <video id="video-player" class="video-player" controls>
+                        <source id="video-source" src="https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66db1833&is=66d9c6b3&hm=6898c82430392f3a6b73a2e55e4af3bffcade76f3c5909a78b2eae9485148c74&" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                </div>
+                <div id="video-list" class="video-list">
+                    <!-- Vídeos serão adicionados aqui dinamicamente -->
                 </div>
             </section>
         </div>
     </div>
-     <script>
+
+    <script>
         // Função para verificar se o usuário está autenticado
         function checkAuthentication() {
             if (localStorage.getItem('authenticated') !== 'true') {
                 // Redireciona para a página de login se não estiver autenticado
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }
         }
 
         // Função para fazer logout
         function logout() {
             localStorage.removeItem('authenticated');
-            window.location.href = "login.html";
+            window.location.href = "index.html";
+        }
+
+        // Dados de vídeos
+        const videos = [
+            { title: "Aula 1: Introdução", duration: "20min", url: "https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66db1833&is=66d9c6b3&hm=6898c82430392f3a6b73a2e55e4af3bffcade76f3c5909a78b2eae9485148c74&", download: "https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66db1833&is=66d9c6b3&hm=6898c82430392f3a6b73a2e55e4af3bffcade76f3c5909a78b2eae9485148c74&" },
+            { title: "Aula 2: Conceitos Básicos", duration: "35min", url: "video2.mp4", download: "video2.mp4" },
+            { title: "Aula 3: Avançando nos Estudos", duration: "45min", url: "video3.mp4", download: "video3.mp4" }
+        ];
+
+        // Adiciona vídeos à lista
+        function loadVideos() {
+            const videoList = document.getElementById('video-list');
+
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.innerHTML = `
+                    <h3>${video.title}</h3>
+                    <p>Duração: ${video.duration}</p>
+                    <a class="download-btn" href="${video.download}" download>Download</a>
+                    <a href="#" onclick="playVideo('${video.url}')">Assistir</a>
+                `;
+                videoList.appendChild(videoItem);
+            });
+        }
+
+        // Função para tocar vídeo
+        function playVideo(url) {
+            const videoPlayer = document.getElementById('video-player');
+            const videoSource = document.getElementById('video-source');
+            videoSource.src = url;
+            videoPlayer.load();
+            videoPlayer.play();
         }
 
         // Verifica a autenticação ao carregar a página
         checkAuthentication();
+        // Carrega os vídeos
+        loadVideos();
     </script>
 </body>
 </html>
