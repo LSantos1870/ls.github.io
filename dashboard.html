@@ -117,7 +117,7 @@
             <ul>
                 <li><a href="#">PORTUGUÊS</a></li>
                 <li><a href="#">MATEMÁTICA</a></li>
-                <li><a href="#">Curso 3</a></li>
+               <button onclick="logout()">Sair</button>
                 <li><a href="#">Curso 4</a></li>
             </ul>
         </aside>
@@ -153,5 +153,23 @@
             </section>
         </div>
     </div>
+     <script>
+        // Função para verificar se o usuário está autenticado
+        function checkAuthentication() {
+            if (localStorage.getItem('authenticated') !== 'true') {
+                // Redireciona para a página de login se não estiver autenticado
+                window.location.href = "login.html";
+            }
+        }
+
+        // Função para fazer logout
+        function logout() {
+            localStorage.removeItem('authenticated');
+            window.location.href = "login.html";
+        }
+
+        // Verifica a autenticação ao carregar a página
+        checkAuthentication();
+    </script>
 </body>
 </html>
