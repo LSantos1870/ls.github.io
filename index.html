@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sistema de Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -13,54 +19,102 @@
             align-items: center;
             height: 100vh;
         }
+
         .login-container {
-            background-color: #fff;
+            background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .login-container h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 300px;
             text-align: center;
         }
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        input {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
         }
-        .login-container button {
+
+        button {
             width: 100%;
             padding: 10px;
-            background-color: #28a745;
-            color: #fff;
+            background-color: #4CAF50;
+            color: white;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
+            font-size: 16px;
         }
-        .login-container button:hover {
-            background-color: #218838;
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Usuário</label>
+            <input type="text" id="username" placeholder="Digite seu usuário" required>
+            
+            <label for="password">Senha</label>
+            <input type="password" id="password" placeholder="Digite sua senha" required>
+            
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="error-message"></p>
+    </div>
 
-<div class="login-container">
-    <h2>Login</h2>
-    <form method="POST" action="authenticate.php">
-        <label for="username">Usuário:</label>
-        <input type="text" id="username" name="username" required>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" required>
+            // Dados ofuscados dos usuários e senhas
+            const encryptedUsers = btoa(JSON.stringify([
+                { username: "usuario1", password: "senha123" },
+                { username: "LS", password: "021" }
+            ]));
 
-        <button type="submit">Entrar</button>
-    </form>
-</div>
+            // Descriptografando os dados
+            const validUsers = JSON.parse(atob(encryptedUsers));
 
+            // Coletando os dados inseridos
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const errorMessage = document.getElementById("error-message");
+
+            // Verificando se algum dos usuários e senhas corresponde
+            const isValidUser = validUsers.some(user => user.username === username && user.password === password);
+
+            if (isValidUser) {
+                // Armazenar a autenticação no localStorage
+                localStorage.setItem('authenticated', 'true');
+                // Redirecionar para a página principal
+                window.location.href = "dashboard.html";
+            } else {
+                // Exibir mensagem de erro
+                errorMessage.textContent = "Usuário ou senha incorretos.";
+            }
+        });
+    </script>
 </body>
 </html>
