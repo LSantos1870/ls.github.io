@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Conectar ao banco de dados
-$host = 'localhost';
+$host = '127.0.0.1';
 $db_user = 'root';  // Insira o usuário do seu banco de dados
 $db_password = '';  // Insira a senha do seu banco de dados
 $db_name = 'sistema_login';
