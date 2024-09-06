@@ -10,13 +10,6 @@ $db_name = 'sistema_login';
 $conn = new mysqli($host, $db_user, $db_password, $db_name);
 
 // Verificar se a conexão deu certo
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Processa o login
-} else {
-    // Se o método não for POST, redirecione ou exiba uma mensagem
-    echo "Método não permitido!";
-}
-
 if ($conn->connect_error) {
     die("Erro na conexão com o banco de dados: " . $conn->connect_error);
 }
