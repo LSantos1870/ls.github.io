@@ -1,5 +1,14 @@
+
 <?php
 session_start();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    echo "Dados recebidos:<br>";
+    echo "Usuário: " . htmlspecialchars($_POST['username']) . "<br>";
+    echo "Senha: " . htmlspecialchars($_POST['password']) . "<br>";
+} else {
+    echo "Nenhum dado foi enviado!";
+    exit;
+}
 
 // Conectar ao banco de dados
 $host = 'localhost';
