@@ -199,14 +199,14 @@
         function checkAuthentication() {
             if (localStorage.getItem('authenticated') !== 'true') {
                 // Redireciona para a página de login se não estiver autenticado
-                window.location.href = "login.html";
+                window.location.href = "index.html";
             }
         }
 
         // Função para fazer logout
         function logout() {
             localStorage.removeItem('authenticated');
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }
 
         // Verifica a autenticação ao carregar a página
