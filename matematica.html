@@ -159,6 +159,43 @@
             max-width: 800px;
             margin-bottom: 20px;
         }
+
+        /* Estilos do menu flutuante */
+        .floating-menu {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 4px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .floating-menu-content {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            width: 300px;
+            z-index: 1001;
+        }
+        .floating-menu-content a {
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+        .floating-menu-content a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -192,6 +229,21 @@
                     <!-- Vídeos serão adicionados aqui dinamicamente -->
                 </div>
             </section>
+        </div>
+    </div>
+
+    <!-- Menu flutuante -->
+    <div class="floating-menu" onclick="toggleMenu()">
+        Menu
+        <div class="floating-menu-content" id="floatingMenuContent">
+            <h2>Envie sua dúvida</h2>
+            <form id="questionForm">
+                <input type="text" id="name" placeholder="Seu Nome" required>
+                <textarea id="question" rows="4" placeholder="Digite sua dúvida" required></textarea>
+                <button type="submit">Enviar Dúvida</button>
+            </form>
+            <h2>Links Rápidos</h2>
+            <a href="forum.html">ver forum</a>
         </div>
     </div>
 
@@ -242,6 +294,110 @@
             videoSource.src = url;
             videoPlayer.load();
             videoPlayer.play();
+        }
+
+        // Função para alternar a exibição do menu flutuante
+        function toggleMenu() {
+            const menuContent = document.getElementById('floatingMenuContent');
+            if (menuContent.style.display === 'block') {
+                menuContent.style.display = 'none';
+            } else {
+                menuContent.style.display = 'block';
+            }
+        }
+
+        // Função para salvar dúvidas no localStorage
+        function saveQuestions(questions) {
+            localStorage.setItem('questions', JSON.stringify(questions));
+        }
+
+        // Função para carregar dúvidas do localStorage
+        function loadQuestions() {
+            const questions = JSON.parse(localStorage.getItem('questions')) || [];
+            return questions;
+        }
+
+        // Função para exibir dúvidas
+        function displayQuestions() {
+            const questions = loadQuestions();
+            const questionContainer = document.getElementById('questionsContainer');
+            questionContainer.innerHTML = '<h2>Dúvidas Enviadas</h2>';
+
+            questions.forEach(q => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                const questionContent = `
+                    <strong>${q.name}</strong> <em>${q.date}</em>
+                    <p>${q.question}</p>
+                    <button onclick="showResponseForm(this)">Responder</button>
+                    <div class="responses"></div>
+                    <div class="response-container" style="display:none;">
+                        <textarea rows="2" placeholder="Digite sua resposta"></textarea>
+                        <button onclick="addResponse(this)">Enviar Resposta</button>
+                    </div>
+                `;
+                questionDiv.innerHTML = questionContent;
+                
+                questionContainer.appendChild(questionDiv);
+            });
+        }
+
+        // Exibir dúvidas ao carregar a página
+        window.onload = function() {
+            displayQuestions();
+        }
+
+        document.getElementById('questionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const question = document.getElementById('question').value;
+            const date = new Date().toLocaleString();
+
+            if (name && question) {
+                const questions = loadQuestions();
+                questions.push({ name, question, date });
+                saveQuestions(questions);
+
+                // Mostrar notificação
+                const notification = document.getElementById('notification');
+                notification.style.display = 'block';
+                
+                // Ocultar notificação após 5 segundos
+                setTimeout(function() {
+                    notification.style.display = 'none';
+                }, 5000);
+
+                // Atualizar a lista de perguntas
+                displayQuestions();
+
+                document.getElementById('name').value = '';
+                document.getElementById('question').value = '';
+            }
+        });
+
+        function showResponseForm(button) {
+            const responseContainer = button.nextElementSibling.nextElementSibling;
+            responseContainer.style.display = 'block';
+        }
+
+        function addResponse(button) {
+            const responseContainer = button.parentElement;
+            const responseText = responseContainer.querySelector('textarea').value;
+            
+            if (responseText) {
+                const responsesDiv = responseContainer.previousElementSibling;
+                
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'response';
+                responseDiv.textContent = responseText;
+                
+                responsesDiv.appendChild(responseDiv);
+                
+                responseContainer.querySelector('textarea').value = '';
+                responseContainer.style.display = 'none';
+            }
         }
 
         // Verifica a autenticação ao carregar a página
