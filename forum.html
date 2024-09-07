@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dúvidas Enviadas</title>
+    <style>
+        /* Resetando margens e espaçamentos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Estilo do container */
+        .container {
+            padding: 20px;
+            background-color: #ecf0f1;
+        }
+
+        .header {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .question {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .question strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .question em {
+            display: block;
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+
+        .response-form {
+            margin-top: 10px;
+        }
+
+        .response-form input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .response-form button {
+            padding: 10px;
+            border: none;
+            background-color: #27ae60;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .response-form button:hover {
+            background-color: #2ecc71;
+        }
+
+        .responses {
+            margin-top: 15px;
+        }
+
+        .responses div {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Dúvidas Enviadas</h1>
+        </header>
+        <div id="questionsContainer"></div>
+    </div>
+
+    <script>
+        // Função para carregar dúvidas e exibir na página
+        function loadQuestions() {
+            const questions = JSON.parse(localStorage.getItem('questions')) || [];
+            const questionContainer = document.getElementById('questionsContainer');
+            questionContainer.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                const questionContent = `
+                    <strong>${q.name}</strong> <em>${q.date}</em>
+                    <p>${q.question}</p>
+                    <div class="responses">
+                        ${q.responses ? q.responses.map(r => `<div>${r}</div>`).join('') : ''}
+                    </div>
+                    <form class="response-form" data-index="${index}">
+                        <input type="text" placeholder="Digite sua resposta..." required>
+                        <button type="submit">Responder</button>
+                    </form>
+                `;
+                questionDiv.innerHTML = questionContent;
+                
+                questionContainer.appendChild(questionDiv);
+            });
+
+            // Adiciona os event listeners para os formulários de resposta
+            document.querySelectorAll('.response-form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const index = this.getAttribute('data-index');
+                    const response = this.querySelector('input').value;
+
+                    addResponse(index, response);
+                });
+            });
+        }
+
+        // Função para adicionar uma resposta à dúvida
+        function addResponse(questionIndex, response) {
+            const questions = JSON.parse(localStorage.getItem('questions')) || [];
+            if (!questions[questionIndex].responses) {
+                questions[questionIndex].responses = [];
+            }
+            questions[questionIndex].responses.push(response);
+            localStorage.setItem('questions', JSON.stringify(questions));
+            loadQuestions();
+        }
+
+        // Carrega as dúvidas ao carregar a página
+        loadQuestions();
+    </script>
+</body>
+</html>
