@@ -104,7 +104,7 @@
             color: #7f8c8d;
         }
 
-        .video-item .download-btn {
+        .video-item .download-btn, .video-item .pdf-btn {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -117,8 +117,17 @@
             text-decoration: none;
         }
 
+        .video-item .pdf-btn {
+            top: 40px;
+            background-color: #e74c3c;
+        }
+
         .video-item .download-btn:hover {
             background-color: #2980b9;
+        }
+
+        .video-item .pdf-btn:hover {
+            background-color: #c0392b;
         }
 
         a {
@@ -142,7 +151,6 @@
             <ul>
                 <li><a href="#">PORTUGUÊS</a></li>
                 <li><a href="#">MATEMÁTICA</a></li>
-                <li><a href="#">Curso 4</a></li>
                 <button onclick="logout()">Sair</button>
             </ul>
         </aside>
@@ -158,7 +166,7 @@
                 <div id="video-player-container">
                     <!-- Player de vídeo -->
                     <video id="video-player" class="video-player" controls>
-                        <source id="video-source" src="https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66dc69b3&is=66db1833&hm=e5e858569af2767db89c0cd2b6159773f1b193c51b962c5bddfe15b2610da593&" type="video/mp4">
+                        <source id="video-source" src="https://drive.google.com/file/d/18MXP409V9n9fTfb3rnd-LPgqQRDL5q_A/view?usp=sharing" type="video/mp4">
                         Seu navegador não suporta o elemento de vídeo.
                     </video>
                 </div>
@@ -184,14 +192,17 @@
             window.location.href = "index.html";
         }
 
-        // Dados de vídeos
+        // Dados de vídeos e PDFs
         const videos = [
-            { title: "Aula 1: Introdução", duration: "20min", url: "https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66db1833&is=66d9c6b3&hm=6898c82430392f3a6b73a2e55e4af3bffcade76f3c5909a78b2eae9485148c74&", download: "https://media.discordapp.net/attachments/1122387038163964087/1281266805578530940/VID-20240803-WA0018.mp4?ex=66db1833&is=66d9c6b3&hm=6898c82430392f3a6b73a2e55e4af3bffcade76f3c5909a78b2eae9485148c74&" },
-            { title: "Aula 2: Conceitos Básicos", duration: "35min", url: "video2.mp4", download: "video2.mp4" },
-            { title: "Aula 3: Avançando nos Estudos", duration: "45min", url: "video3.mp4", download: "video3.mp4" }
+            { title: "Aula 1: Introdução", duration: "20min", url:"video1.mp4", download: "video2.mp4", pdf: "aula1.pdf" },
+            { title: "Aula 2: Conceitos Básicos", duration: "35min", url: "video2.mp4", download: "video2.mp4", pdf: "aula2.pdf" },
+            { title: "Aula 3: Avançando nos Estudos", duration: "45min", url: "video3.mp4", download: "video3.mp4", pdf: "aula3.pdf" },
+            { title: "Aula 1: Introdução", duration: "20min", url:"video1.mp4", download: "video2.mp4", pdf: "aula1.pdf" },
+            { title: "Aula 2: Conceitos Básicos", duration: "35min", url: "video2.mp4", download: "video2.mp4", pdf: "aula2.pdf" },
+            { title: "Aula 3: Avançando nos Estudos", duration: "45min", url: "video3.mp4", download: "video3.mp4", pdf: "aula3.pdf" }
         ];
 
-        // Adiciona vídeos à lista
+        // Adiciona vídeos e PDFs à lista
         function loadVideos() {
             const videoList = document.getElementById('video-list');
 
@@ -201,7 +212,8 @@
                 videoItem.innerHTML = `
                     <h3>${video.title}</h3>
                     <p>Duração: ${video.duration}</p>
-                    <a class="download-btn" href="${video.download}" download>Download</a>
+                    <a class="download-btn" href="${video.download}" download>Baixar Questões</a>
+                    <a class="pdf-btn" href="${video.pdf}" download>Baixar Teoria</a>
                     <a href="#" onclick="playVideo('${video.url}')">Assistir</a>
                 `;
                 videoList.appendChild(videoItem);
@@ -219,7 +231,7 @@
 
         // Verifica a autenticação ao carregar a página
         checkAuthentication();
-        // Carrega os vídeos
+        // Carrega os vídeos e PDFs
         loadVideos();
     </script>
 </body>
