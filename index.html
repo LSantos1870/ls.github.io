@@ -13,11 +13,14 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-image:url(intro.png);
+            background-image: url('intro.png'); /* Substitua pelo caminho correto da sua imagem */
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            padding: 20px;
         }
 
         .login-container {
@@ -25,7 +28,8 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
         }
 
@@ -65,6 +69,24 @@
         #error-message {
             color: red;
             margin-top: 10px;
+        }
+
+        /* Media queries para responsividade */
+        @media (max-width: 600px) {
+            .login-container {
+                width: 90%;
+            }
+
+            input, button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        @media (min-width: 601px) and (max-width: 900px) {
+            .login-container {
+                width: 80%;
+            }
         }
     </style>
 </head>
